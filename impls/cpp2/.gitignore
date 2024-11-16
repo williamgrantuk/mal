@@ -2,6 +2,6 @@
 *.o
 *.a
 *.cpp
-*.d
+*.h
 step0_repl
 step1_read_print

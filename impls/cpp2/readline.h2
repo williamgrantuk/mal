@@ -1,0 +1,34 @@
+#include <readline/readline.h>
+#include <readline/history.h>
+#include <readline/tilde.h>
+
+mal: namespace = {
+    copy_and_free: (ptr: *char) -> std::string = {
+        result: std::string = ptr;
+        std::free(ptr);
+        return result;
+    }
+
+    ReadLine: type = {
+        history_path: std::string;
+
+        operator=: (out this, path: std::string) = {
+            history_path = copy_and_free(tilde_expand(path.c_str()));
+            read_history(history_path.c_str());
+        }
+
+        get: (this, prompt: std::string) -> std::optional<std::string> = {
+            line: *char = readline(prompt.c_str());
+            if line == nullptr {
+                return std::nullopt;
+            }
+
+            add_history(line);
+            if append_history(1, history_path.c_str()) != 0 {
+                write_history(history_path.c_str());
+            }
+
+            return copy_and_free(line);
+        }
+    }
+}
