@@ -1,0 +1,19 @@
+read: (x: std::string) -> std::string = x;
+
+eval: (x: std::string) -> std::string = x;
+
+print: (x: std::string) -> std::string = x;
+
+rep: (x: std::string) -> std::string = print(eval(read(x)));
+
+main: () =
+{
+    line: std::string = "";
+
+    while true
+    {
+        std::cout << "user> ";
+        std::getline(std::cin, line);
+        std::cout << rep(line) << "\n";
+    }
+}
